@@ -18,7 +18,6 @@ public class PlayerMover : MonoBehaviour
         {
             MoveNextPoint();
         }
-        
     }
 
     private void MoveNextPoint()

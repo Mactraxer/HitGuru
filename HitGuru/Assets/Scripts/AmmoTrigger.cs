@@ -8,6 +8,13 @@ public class AmmoTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        OnDetectObstacle?.Invoke();    
+        if (other.gameObject.TryGetComponent(out Obstacle obstacle))
+        {
+            OnDetectObstacle?.Invoke();
+        }
+        else if (other.gameObject.TryGetComponent(out Enemy enemy))
+        {
+            OnDetectEnemy?.Invoke();
+        }
     }
 }

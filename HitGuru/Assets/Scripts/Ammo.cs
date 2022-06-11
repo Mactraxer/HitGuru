@@ -7,7 +7,6 @@ using System;
 public class Ammo : MonoBehaviour
 {
     private Rigidbody _rigidbody;
-    [SerializeField] Vector3 _pointForce;
     [SerializeField] AmmoTrigger _trigger;
 
     public event Action<Ammo> OnDetectObstacle;
@@ -30,18 +29,13 @@ public class Ammo : MonoBehaviour
 
     private void StartRotate()
     {
-        _rigidbody.AddTorque(Vector3.right, ForceMode.Force);
+        _rigidbody.AddTorque(transform.right, ForceMode.Force);
     }
 
     public void Stop()
     {
         StopAllCoroutines();
         _rigidbody.isKinematic = true;
-    }
-
-    public void SetRotate(Quaternion quaternion)
-    {
-        transform.SetPositionAndRotation(transform.position, quaternion);
     }
 
     private void DetectObstacleHander()
