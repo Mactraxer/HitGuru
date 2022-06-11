@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class Thrower : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Thrower : MonoBehaviour
     [SerializeField] int _maxAmmoInScene;//Remove to upper level component
     private List<Ammo> _ammoPool;
     private Camera _camera;
+
+    public event Action OnThrow;
 
     private void Start()
     {
@@ -32,6 +35,7 @@ public class Thrower : MonoBehaviour
     {
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
         {
+            OnThrow?.Invoke();
             ThrowAmmo(hit.point);
             ControlAmmoCount();
         }
