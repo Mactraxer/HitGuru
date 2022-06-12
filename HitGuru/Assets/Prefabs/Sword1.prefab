@@ -139,3 +139,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trigger: {fileID: 0}
+  _positionSettings: {x: 0.3089, y: -0.0254, z: -0.2405}
+  _rotateSettings: {x: -99.433, y: 0, z: -40.634}

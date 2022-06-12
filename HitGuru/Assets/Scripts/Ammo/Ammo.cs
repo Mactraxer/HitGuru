@@ -7,10 +7,15 @@ using System;
 public class Ammo : MonoBehaviour
 {
     private Rigidbody _rigidbody;
-    [SerializeField] AmmoTrigger _trigger;
+    [SerializeField] private AmmoTrigger _trigger;
+    [SerializeField] private Vector3 _positionSettings;
+    [SerializeField] private Vector3 _rotateSettings;
 
     public event Action<Ammo> OnDetectObstacle;
     public event Action<Ammo> OnDetectEmeny;
+
+    public Vector3 positionForSpawn => _positionSettings;
+    public Vector3 rotationForSpawn => _rotateSettings;
 
     private void Awake()
     {
@@ -21,15 +26,16 @@ public class Ammo : MonoBehaviour
         _trigger.OnDetectEnemy += DetectEnemyHandler;
     }
 
+    private void OnDestroy()
+    {
+        _trigger.OnDetectObstacle -= DetectObstacleHander;
+        _trigger.OnDetectEnemy -= DetectEnemyHandler;
+    }
+
     public void MoveTo(Vector3 newPosition)
     {
         StartCoroutine(MoveAmmoCoroutine(transform, newPosition));
-        StartRotate();
-    }
-
-    private void StartRotate()
-    {
-        _rigidbody.AddTorque(transform.right, ForceMode.Force);
+        StartCoroutine(RotateAmmoCoroutine(transform, new Vector3(0.02f, 0, 0)));
     }
 
     public void Stop()
@@ -46,6 +52,16 @@ public class Ammo : MonoBehaviour
     private void DetectEnemyHandler()
     {
         OnDetectEmeny?.Invoke(this);
+    }
+
+    private IEnumerator RotateAmmoCoroutine(Transform ammoTransform, Vector3 eulerVector)
+    {
+        var waitForFixedUpdate = new WaitForFixedUpdate();
+        while (true)
+        {
+            ammoTransform.Rotate(Vector3.right, 10);
+            yield return waitForFixedUpdate;
+        }
     }
 
     private IEnumerator MoveAmmoCoroutine(Transform ammoTransform, Vector3 distanseVector)

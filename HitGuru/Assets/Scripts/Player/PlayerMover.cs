@@ -17,15 +17,7 @@ public class PlayerMover : MonoBehaviour
         _currentWayPoint = 0;
     }
 
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            MoveNextPoint();
-        }
-    }
-
-    private void MoveNextPoint()
+    public void MoveNextPoint()
     {
         if (_currentWayPoint >= _wayPoints.Length) return;
 

@@ -1,84 +1,35 @@
-using UnityEngine;
-using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public class Thrower : MonoBehaviour
-{
-    [SerializeField] Ammo _ammoPrefab;
-    [SerializeField] Transform _spawnPosition;
-    [SerializeField] int _maxAmmoInScene;//Remove to upper level component
-    private List<Ammo> _ammoPool;
+{  
     private Camera _camera;
+    private Vector3 _hitPoint;
 
     public event Action OnThrow;
 
     private void Start()
     {
-        _ammoPool = new List<Ammo>();
         _camera = Camera.main;
     }
 
-    private void Update()
-    {
-        GetInput();
-    }
-
-    private void GetInput()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            CalculateTrajectory();
-        }
-    }
-
-    private void CalculateTrajectory()
+    public void CalculateTrajectory()
     {
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
         {
             OnThrow?.Invoke();
-            ThrowAmmo(hit.point);
-            ControlAmmoCount();
+            _hitPoint = hit.point;
         }
     }
 
-    private void ControlAmmoCount()
+    private void ThrowAmmoToPoint(Ammo ammo, Vector3 point)
     {
-        if (_maxAmmoInScene < _ammoPool.Count)
-        {
-            _ammoPool.RemoveAt(0);
-        }
+        ammo.transform.LookAt(point);
+        ammo.MoveTo(point);   
     }
 
-    private void ThrowAmmo(Vector3 direction)
+    public void ThrowAmmo(Ammo ammo)
     {
-        Ammo ammo = SpawnAmmo();
-        ammo.transform.LookAt(direction);
-        ammo.MoveTo(direction);   
-    }
-
-    private Ammo SpawnAmmo()
-    {
-        Ammo instantiatedAmmo = Instantiate(_ammoPrefab, _spawnPosition.position, Quaternion.identity);
-        _ammoPool.Add(instantiatedAmmo);
-        instantiatedAmmo.OnDetectObstacle += DetectObstacleHandler;
-        instantiatedAmmo.OnDetectEmeny += DetectEnemyHandler;
-        return instantiatedAmmo;
-    }
-
-    private void DetectObstacleHandler(Ammo ammo)
-    {
-        StopSimulateAmmo(ammo);
-    }
-
-    private void DetectEnemyHandler(Ammo ammo)
-    {
-        StopSimulateAmmo(ammo);
-    }
-
-    private void StopSimulateAmmo(Ammo ammo)
-    {
-        ammo.Stop();
-        ammo.transform.LookAt(_spawnPosition);
-        ammo.transform.Rotate(Vector3.right, -90);
+        ThrowAmmoToPoint(ammo, _hitPoint);
     }
 }
