@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-[RequireComponent(typeof(Rigidbody))]
+//[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AmmoTrigger))]
 public class Ammo : MonoBehaviour
 {
@@ -41,6 +41,7 @@ public class Ammo : MonoBehaviour
     public void Stop()
     {
         StopAllCoroutines();
+        GetComponent<BoxCollider>().enabled = false;
         _rigidbody.isKinematic = true;
     }
 

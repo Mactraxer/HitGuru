@@ -28,7 +28,6 @@ public class AmmoSpawner : MonoBehaviour
             _ammoPool.RemoveAt(0);
             ammoToDelete.OnDetectEmeny -= DetectEnemyHandler;
             ammoToDelete.OnDetectObstacle -= DetectObstacleHandler;
-            print($"Destroed {ammoToDelete.name}");
             Destroy(ammoToDelete);
         }
     }
