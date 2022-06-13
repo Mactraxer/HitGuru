@@ -32,7 +32,7 @@ public class AmmoSpawner : MonoBehaviour
         }
     }
 
-    public Ammo SpawnAmmo()
+    public void SpawnAmmo()
     {
         ControlAmmoCount();
 
@@ -45,7 +45,6 @@ public class AmmoSpawner : MonoBehaviour
         instantiatedAmmo.OnDetectObstacle += DetectObstacleHandler;
         instantiatedAmmo.OnDetectEmeny += DetectEnemyHandler;
         _ammoPool.Add(instantiatedAmmo);
-        return instantiatedAmmo;
     }
 
     public Ammo GetLastSpawnedAmmo()

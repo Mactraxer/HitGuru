@@ -10,9 +10,9 @@ public class PlayerAnimator : MonoBehaviour
     private const string THROW_CLIP_NAME = "Throw";
 
     private Animator _animator;
-    public event Action ThrowAnimationEnd;
+    public event Action OnThrowAnimationEnd;
+    public event Action OnThrowAnimationAction;
 
-    public bool ThrowAnimated => _animator.GetCurrentAnimatorClipInfo(0)[0].clip.name != THROW_CLIP_NAME;
     private void Start()
     {
         _animator = GetComponent<Animator>();
@@ -34,8 +34,13 @@ public class PlayerAnimator : MonoBehaviour
         _animator.Play(RUN_CLIP_NAME);
     }
 
+    public void AnimationThrowAction()
+    {
+        OnThrowAnimationAction?.Invoke();
+    }
+
     public void AnimationEnd()
     {
-        ThrowAnimationEnd?.Invoke();
+        OnThrowAnimationEnd?.Invoke();
     }
 }

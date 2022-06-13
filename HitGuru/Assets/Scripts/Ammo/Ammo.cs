@@ -71,7 +71,7 @@ public class Ammo : MonoBehaviour
         while (ammoTransform.position != distanseVector)
         {
 
-            ammoTransform.position = Vector3.MoveTowards(ammoTransform.position, distanseVector, 0.2f);
+            ammoTransform.position = Vector3.MoveTowards(ammoTransform.position, distanseVector, 0.3f);
             yield return waitForFixedUpdate;
         }
     }

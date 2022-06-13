@@ -30,10 +30,12 @@ public class PlayerMover : MonoBehaviour
     private IEnumerator ReachDistinationCoroutine()
     {
         var waitForFixedUpdate = new WaitForFixedUpdate();
+        var distanceToPoint = (_agent.destination - transform.position).magnitude;
         
-        while (_agent.destination != transform.position)
+        while (distanceToPoint >= _agent.stoppingDistance)
         {
             yield return waitForFixedUpdate;
+            distanceToPoint = (_agent.destination - transform.position).magnitude;
         }
 
         OnStopMove?.Invoke();
