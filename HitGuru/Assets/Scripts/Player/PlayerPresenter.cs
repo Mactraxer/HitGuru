@@ -3,7 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(Thrower))]
 [RequireComponent(typeof(PlayerMover))]
-[RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(AmmoSpawner))]
 public class PlayerPresenter: MonoBehaviour // Drop MonoBehaviour and add DI 
 {
@@ -14,7 +13,6 @@ public class PlayerPresenter: MonoBehaviour // Drop MonoBehaviour and add DI
     private Thrower _thrower;
     private PlayerMover _mover;
     private AmmoSpawner _spawner;
-    private PlayerInput _input;
 
     private void Start()
     {
@@ -22,7 +20,6 @@ public class PlayerPresenter: MonoBehaviour // Drop MonoBehaviour and add DI
         _thrower = GetComponent<Thrower>();
         _mover = GetComponent<PlayerMover>();
         _spawner = GetComponent<AmmoSpawner>();
-        _input = GetComponent<PlayerInput>();
 
         _spawner.OnDetectEmeny += DetectEnemyHandler;
         _spawner.OnDetectObstacle += DetectObstacleHandler;
@@ -33,9 +30,6 @@ public class PlayerPresenter: MonoBehaviour // Drop MonoBehaviour and add DI
         _mover.OnStopMove += PlayerStopMoveHandler;
 
         _animator.ThrowAnimationEnd += ThrowAnimationEndHandler;
-
-        _input.OnInputHit += InputHitHandler;
-        _input.OnInputMove += InputMoveHandler;
 
         _spawner.Init(3, _ammoPrefab, _spawnTransform);
     }
@@ -51,9 +45,19 @@ public class PlayerPresenter: MonoBehaviour // Drop MonoBehaviour and add DI
         _mover.OnStopMove -= PlayerStopMoveHandler;
 
         _animator.ThrowAnimationEnd -= ThrowAnimationEndHandler;
+    }
 
-        _input.OnInputHit -= InputHitHandler;
-        _input.OnInputMove -= InputMoveHandler;
+    public void Hit()
+    {
+        if (_animator.ThrowAnimated == false) return;
+
+        _spawner.SpawnAmmo();
+        _thrower.CalculateTrajectory();
+    }
+
+    public void Move()
+    {
+        _mover.MoveNextPoint();
     }
 
     // Thrower action handler
@@ -91,19 +95,5 @@ public class PlayerPresenter: MonoBehaviour // Drop MonoBehaviour and add DI
     private void DetectObstacleHandler(Ammo ammo)
     {
         _spawner.StopSimulateAmmo(ammo);
-    }
-
-    // Input action handlers
-    private void InputMoveHandler()
-    {
-        _mover.MoveNextPoint();
-    }
-
-    private void InputHitHandler()
-    {
-        if (_animator.ThrowAnimated == false) return;
-        
-        _spawner.SpawnAmmo();
-        _thrower.CalculateTrajectory();
     }
 }

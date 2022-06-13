@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class EnemyPresenter : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class EnemyPresenter : MonoBehaviour
     [SerializeField] private Transform _bodyTransform;
     [SerializeField] private EnemyView _view;
 
+    public event Action OnEnemyDefetead;
+
     private void Start()
     {
         _model = new EnemyModel(2);//TODO remove to inspector. Use scriptable object
@@ -17,6 +20,8 @@ public class EnemyPresenter : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
 
         _trigger.OnTakeHit += TakeHitHandler;
+
+        _view.DisplayHealthCount(_model._healthPoint.ToString());
     }
 
     private void TakeHitHandler(Ammo ammo)
@@ -39,6 +44,7 @@ public class EnemyPresenter : MonoBehaviour
 
     private void DeathEnemy()
     {
+        OnEnemyDefetead?.Invoke();
         _animator.enabled = false;
         _rigidbody.isKinematic = true;
     }

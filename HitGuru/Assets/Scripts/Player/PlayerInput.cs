@@ -3,8 +3,7 @@ using System;
 
 public class PlayerInput : MonoBehaviour
 {
-    public event Action OnInputMove;
-    public event Action OnInputHit;
+    public event Action OnInputTap;
 
     private void Update()
     {
@@ -15,12 +14,7 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            OnInputHit?.Invoke();
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            OnInputMove?.Invoke();
+            OnInputTap?.Invoke();
         }
     }
 }
